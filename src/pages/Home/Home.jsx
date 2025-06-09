@@ -1,8 +1,18 @@
 import Navbar from "../Navbar/Navbar";
+
+import './Home.css';
+import hero_banner from '../../assets/assets/hero_banner.jpg';
+
+
 const Home = () => {
     return ( <>
-    <h1 style={{color:"white"}}>Hello nagasundharam</h1>
-    <Navbar/></> );
+  
+    <Navbar/>
+    <div className="hero">
+        <img src={hero_banner} alt="" />
+    </div>
+   
+    </> );
 }
  
 export default Home;
