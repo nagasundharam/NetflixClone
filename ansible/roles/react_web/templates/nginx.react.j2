@@ -1,0 +1,23 @@
+
+server {
+
+        listen 80;
+
+        server_name {{ domain | default('_') }};
+
+        root /var/www/react;
+        index index.html;
+
+
+        location / {
+
+                try_files $uri /index.html;
+
+        }
+
+
+        access_log /var/log/nginx/react_access.log;
+        error_log /var/log/nginx/react_error.log;
+
+}
+~
