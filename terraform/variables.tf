@@ -10,4 +10,5 @@ variable "domain_name" { default = "" }
 variable "private_key_path" {
   description = "Path to the private key for remote SSH connection"
   type        = string
+  default = "~/.ssh/id_ed25519"
 }
