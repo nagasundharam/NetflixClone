@@ -136,26 +136,16 @@ resource "aws_security_group" "web_sg" {
    }
 
 
-  resource "aws_instance" "web" {
+ resource "aws_instance" "web" {
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = var.instance_type
+  subnet_id              = aws_subnet.public.id
+  vpc_security_group_ids = [aws_security_group.web_sg.id]
+  key_name               = aws_key_pair.deployer.key_name
+  tags = { Name = "react-web-server" }
 
-                ami = data.aws_ami.ubuntu.id
-
-                                                    
-                instance_type = var.instance_type
-
-                subnet_id  = aws_subnet.public.id
-
-                vpc_security_group_ids = [aws_security_group.web_sg.id]
-
-                key_name =  aws_key_pair.deployer.key_name
-
-                tags = { Name = "react-web-server" }
-
-     # minimal remote-exec (optional) = can be removed if you use Ansible only
-
-               
-            }
-
+  depends_on = [aws_security_group.web_sg]
+}
 
 output "instance_public_ip"  {
 
