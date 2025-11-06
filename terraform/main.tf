@@ -155,7 +155,14 @@ resource "aws_security_group" "web_sg" {
 
                provisioner "remote-exec" {
 
-                inline = ["sudo apt-get update -y"]
+               inline = [
+  "sudo rm -rf /var/lib/apt/lists/lock",
+  "sudo rm -rf /var/cache/apt/archives/lock",
+  "sudo rm -rf /var/lib/dpkg/lock*",
+  "sudo apt-get clean",
+  "sudo apt-get update -y"
+]
+
 
                 connection {
 
