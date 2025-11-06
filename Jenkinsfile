@@ -19,8 +19,8 @@ pipeline {
       steps {
         sh '''
           # Install Node.js and npm (make sure repo is updated)
-          sudo apt-get update -y
-          sudo apt-get install -y nodejs npm
+          apt-get update -y
+          apt-get install -y nodejs npm
 
           # Clean install dependencies
           npm ci
