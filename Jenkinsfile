@@ -10,7 +10,6 @@ pipeline {
 
     stage('Checkout') {
       steps {
-        // Always use checkout scm or git with branch info
         git branch: 'main', url: 'https://github.com/nagasundharam/NetflixClone.git'
       }
     }
@@ -18,14 +17,10 @@ pipeline {
     stage('Build React') {
       steps {
         sh '''
-          # Install Node.js and npm (make sure repo is updated)
           apt-get update -y
           apt-get install -y nodejs npm
 
-          # Clean install dependencies
           npm ci
-
-          # Build React app
           npm run build
         '''
       }
@@ -42,6 +37,14 @@ pipeline {
               terraform init -input=false
               terraform apply -auto-approve
             '''
+            script {
+              // Capture Terraform output dynamically
+              env.INSTANCE_IP = sh(
+                script: "terraform output -raw instance_public_ip",
+                returnStdout: true
+              ).trim()
+              echo "✅ Instance public IP: ${env.INSTANCE_IP}"
+            }
           }
         }
       }
@@ -54,11 +57,17 @@ pipeline {
           keyFileVariable: 'KEYFILE',
           usernameVariable: 'SSHUSER'
         )]) {
-          sh '''
+          // Generate dynamic inventory
+          sh """
+            echo "[web]" > ansible/inventories/hosts.ini
+            echo "${INSTANCE_IP} ansible_user=${SSHUSER}" >> ansible/inventories/hosts.ini
+            echo "✅ Using dynamic Ansible inventory:"
+            cat ansible/inventories/hosts.ini
+
             ansible-playbook \
               -i ansible/inventories/hosts.ini ansible/playbook.yml \
               --extra-vars "ansible_ssh_private_key_file=${KEYFILE} ansible_user=${SSHUSER}"
-          '''
+          """
         }
       }
     }
@@ -73,4 +82,3 @@ pipeline {
     }
   }
 }
- 
