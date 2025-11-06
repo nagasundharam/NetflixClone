@@ -153,29 +153,7 @@ resource "aws_security_group" "web_sg" {
 
      # minimal remote-exec (optional) = can be removed if you use Ansible only
 
-               provisioner "remote-exec" {
-
-               inline = [
-  "sudo rm -rf /var/lib/apt/lists/lock",
-  "sudo rm -rf /var/cache/apt/archives/lock",
-  "sudo rm -rf /var/lib/dpkg/lock*",
-  "sudo apt-get clean",
-  "sudo apt-get update -y"
-]
-
-
-                connection {
-
-                        type = "ssh"
-
-                        user = "ubuntu"
-
-                        private_key = file("~/.ssh/id_ed25519")
-
-                        host     = self.public_ip
-                        
-                        }
-                }
+               
             }
 
 
