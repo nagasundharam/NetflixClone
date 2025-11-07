@@ -1,9 +1,7 @@
 pipeline {
   agent any
-  
-  options {
-  cleanWs()
-}
+
+ 
 
 
   environment {
@@ -83,6 +81,9 @@ pipeline {
   }
 
   post {
+    always {
+      cleanWs()  // 🧹 clean workspace after every build
+    }
     failure {
       echo "❌ Pipeline failed!"
     }
