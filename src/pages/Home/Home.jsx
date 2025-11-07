@@ -13,6 +13,7 @@ const Home = () => {
           <div className="hero-content">
             <h1>Unlimited movies, TV shows, and more.</h1>
             <h1>Nagasundharam</h1>
+            <p>Devops Engineer</p>
             <p>Watch anywhere. Cancel anytime.</p>
             <button className="btn btn-primary">See Now</button>
           </div>
