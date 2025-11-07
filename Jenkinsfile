@@ -22,6 +22,9 @@ pipeline {
 
           npm ci
           npm run build
+          tar -czf /tmp/react_build.tar.gz -C build .
+      echo "✅ Build artifact created at /tmp/react_build.tar.gz"
+      ls -lh /tmp/react_build.tar.gz
         '''
       }
     }
