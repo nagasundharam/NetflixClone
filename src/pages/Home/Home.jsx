@@ -1,18 +1,24 @@
+import React from "react";
+import "./Home.css";
 import Navbar from "../Navbar/Navbar";
-
-import './Home.css';
-import hero_banner from '../../assets/assets/hero_banner.jpg';
-
+import hero_banner from "../../assets/assets/hero_banner.jpg";
 
 const Home = () => {
-    return ( <>
-  
-    <Navbar/>
-    <div className="hero">
-        <img src={hero_banner} alt="" />
-    </div>
-   
-    </> );
-}
- 
+  return (
+    <>
+      <Navbar />
+      <section className="hero">
+        <img src={hero_banner} alt="Hero Banner" className="hero-image" />
+        <div className="hero-overlay">
+          <div className="hero-content">
+            <h1>Unlimited movies, TV shows, and more.</h1>
+            <p>Watch anywhere. Cancel anytime.</p>
+            <button className="btn btn-primary">Watch Now</button>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+};
+
 export default Home;
