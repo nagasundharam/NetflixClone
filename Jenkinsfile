@@ -57,10 +57,19 @@ pipeline {
       keyFileVariable: 'KEYFILE',
       usernameVariable: 'SSHUSER'
     )]) {
-      sh """
+      sh '''
         echo "KEYFILE = ${KEYFILE}"
          echo "SSHUSER = ${SSHUSER}"
         ls -l ${KEYFILE}
+        
+        if [ -f "$KEYFILE" ]; then
+          echo "Keyfile exists"
+          ls -l "$KEYFILE" | awk '{print $1, $3, $4, $5}'
+        else
+          echo "Keyfile does NOT exist"
+        fi
+
+
 
         echo "[web]" > ansible/inventories/hosts.ini
         echo "${INSTANCE_IP} ansible_user=${SSHUSER} ansible_ssh_private_key_file=${KEYFILE}" >> ansible/inventories/hosts.ini
@@ -68,7 +77,7 @@ pipeline {
         cat ansible/inventories/hosts.ini
 
         ansible-playbook -i ansible/inventories/hosts.ini ansible/playbook.yml
-      """
+      '''
     }
   }
 }
