@@ -12,8 +12,9 @@ const Home = () => {
         <div className="hero-overlay">
           <div className="hero-content">
             <h1>Unlimited movies, TV shows, and more.</h1>
+            <h1>Nagasundharam</h1>
             <p>Watch anywhere. Cancel anytime.</p>
-            <button className="btn btn-primary">Watch Now</button>
+            <button className="btn btn-primary">See Now</button>
           </div>
         </div>
       </section>
