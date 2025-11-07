@@ -1,5 +1,10 @@
 pipeline {
   agent any
+  
+  options {
+  cleanWs()
+}
+
 
   environment {
     SSH_CRED_ID = 'jenkins-ssh-key-id'
