@@ -58,6 +58,10 @@ pipeline {
       usernameVariable: 'SSHUSER'
     )]) {
       sh """
+        echo "KEYFILE = ${KEYFILE}"
+         echo "SSHUSER = ${SSHUSER}"
+        ls -l ${KEYFILE}
+
         echo "[web]" > ansible/inventories/hosts.ini
         echo "${INSTANCE_IP} ansible_user=${SSHUSER} ansible_ssh_private_key_file=${KEYFILE}" >> ansible/inventories/hosts.ini
         echo "✅ Using dynamic Ansible inventory:"
