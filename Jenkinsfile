@@ -14,21 +14,17 @@ pipeline {
       }
     }
 
-  stage('Build React') {
-  steps {
-    sh '''
-      apt-get update -y
-      apt-get install -y nodejs npm tar
+    stage('Build React') {
+      steps {
+        sh '''
+          apt-get update -y
+          apt-get install -y nodejs npm
 
-      npm ci
-      npm run build
-
-      echo "📦 Creating build artifact..."
-      tar -czf /tmp/react_build.tar.gz -C build .
-      ls -lh /tmp/react_build.tar.gz
-    '''
-  }
-}
+          npm ci
+          npm run build
+        '''
+      }
+    }
 
     stage('Terraform Apply') {
       steps {
