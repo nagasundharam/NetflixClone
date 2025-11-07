@@ -50,25 +50,23 @@ pipeline {
       }
     }
 
-  stage('Ansible Deploy') {
+ stage('Ansible Deploy') {
   steps {
     withCredentials([sshUserPrivateKey(
       credentialsId: env.SSH_CRED_ID,
       keyFileVariable: 'KEYFILE',
       usernameVariable: 'SSHUSER'
     )]) {
-      sh """
-        # Create inventory with only IP and user (no key path)
+      sh '''
         echo "[web]" > ansible/inventories/hosts.ini
         echo "${INSTANCE_IP} ansible_user=${SSHUSER}" >> ansible/inventories/hosts.ini
 
         echo "✅ Using dynamic Ansible inventory:"
         cat ansible/inventories/hosts.ini
 
-        # Run ansible-playbook passing the key path as an extra var
-        ansible-playbook -i ansible/inventories/hosts.ini ansible/playbook.yml \\
-          --extra-vars "ansible_ssh_private_key_file=${KEYFILE} ansible_user=${SSHUSER}"
-      """
+        ansible-playbook -i ansible/inventories/hosts.ini ansible/playbook.yml \
+          --private-key ${KEYFILE} -u ${SSHUSER}
+      '''
     }
   }
 }
