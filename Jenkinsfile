@@ -51,26 +51,24 @@ pipeline {
     }
 
     stage('Ansible Deploy') {
-      steps {
-        withCredentials([sshUserPrivateKey(
-          credentialsId: env.SSH_CRED_ID,
-          keyFileVariable: 'KEYFILE',
-          usernameVariable: 'SSHUSER'
-        )]) {
-          // Generate dynamic inventory
-          sh """
-            echo "[web]" > ansible/inventories/hosts.ini
-            echo "${INSTANCE_IP} ansible_user=${SSHUSER}" >> ansible/inventories/hosts.ini
-            echo "✅ Using dynamic Ansible inventory:"
-            cat ansible/inventories/hosts.ini
+  steps {
+    withCredentials([sshUserPrivateKey(
+      credentialsId: env.SSH_CRED_ID,
+      keyFileVariable: 'KEYFILE',
+      usernameVariable: 'SSHUSER'
+    )]) {
+      sh """
+        echo "[web]" > ansible/inventories/hosts.ini
+        echo "${INSTANCE_IP} ansible_user=${SSHUSER} ansible_ssh_private_key_file=${KEYFILE}" >> ansible/inventories/hosts.ini
+        echo "✅ Using dynamic Ansible inventory:"
+        cat ansible/inventories/hosts.ini
 
-            ansible-playbook \
-              -i ansible/inventories/hosts.ini ansible/playbook.yml \
-              --extra-vars "ansible_ssh_private_key_file=${KEYFILE} ansible_user=${SSHUSER}"
-          """
-        }
-      }
+        ansible-playbook -i ansible/inventories/hosts.ini ansible/playbook.yml
+      """
     }
+  }
+}
+
   }
 
   post {
