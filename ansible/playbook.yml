@@ -1,18 +1,22 @@
 - name: Prepare web server
   hosts: web
   become: yes
-  vars:
-    domain: "{{ domain_name | default('') }}"
   roles:
     - react_web
+
 - name: Deploy built assets
   hosts: web
   become: yes
   tasks:
+    - name: Copy build artifact to remote server
+      copy:
+        src: /tmp/react_build.tar.gz
+        dest: /tmp/react_build.tar.gz
+
     - name: Unpack artifact to deployment dir
       unarchive:
         src: /tmp/react_build.tar.gz
-        dest: /var/www/react 
+        dest: /var/www/react
         remote_src: yes
         owner: www-data
         group: www-data

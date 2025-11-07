@@ -2,7 +2,7 @@
   apt:
     update_cache: yes
     cache_valid_time: 3600
-- name : Install required packages
+- name: Install required packages
   apt:
     name:
       - nginx
@@ -11,7 +11,7 @@
       - snapd
     state: present
     update_cache: yes
-- name : Ensure certbot is installed via snap
+- name: Ensure certbot is installed via snap
   command: snap install --classic certbot
   args:
     creates: /snap/bin/certbot
@@ -27,39 +27,12 @@
     owner: www-data
     group: www-data
     mode: '0755'
-- name: Enable nginx site
-  file:
-    src: /etc/nginx/sites-available/react
-    dest: /etc/nginx/sites-enabled/react
-    state: link
-    force: yes
-- name: Remove default nginx conf if exists
-  file:
-    path: /etc/nginx/sites-enabled/default
-    state: absent
-- name: Test nginx config
+- name: Deploy nginx config
   template:
     src: nginx.react.j2
     dest: /etc/nginx/sites-available/react
     owner: root
-    group : root
-    mode: '0644'
-- name: Enable nginx site
-  file:
-    src: /etc/nginx/sites-available/react
-    dest: /etc/nginx/sites-enabled/react
-    state: link
-    force: yes
-- name: Remove default nginx conf if exists
-  file:
-    path: /etc/nginx/sites-enabled/default
-    state: absent
-- name: Test nginx config
-  template:
-    src: nginx.react.j2
-    dest: /etc/nginx/sites-available/react
-    owner: root
-    group : root
+    group: root
     mode: '0644'
 - name: Enable nginx site
   file:
@@ -79,4 +52,3 @@
   service:
     name: nginx
     state: restarted
-

@@ -1,7 +1,0 @@
-- name: Unpack artifact to deployment dir
-  unarchive:
-    src: /tmp/react_build.tar.gz
-    dest: /var/www/react
-    remote_src: yes
-    owner: www-data
-    group: www-data
