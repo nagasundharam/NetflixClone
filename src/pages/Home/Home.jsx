@@ -14,7 +14,7 @@ const Home = () => {
             <h1>Unlimited movies, TV shows, and more.</h1>
             <h1>Nagasundharam</h1>
             <p>Devops Engineer</p>
-            <p>Watch anywhere. Cancel anytime.</p>
+            <p>Bannari Amman Institute of Technology</p>
             <button className="btn btn-primary">See Now</button>
           </div>
         </div>
