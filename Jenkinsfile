@@ -55,6 +55,13 @@ pipeline {
         }
       }
     }
+    stage('Prepare SSH Known Hosts') {
+      steps {
+        sh '''
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${INSTANCE_IP} >> ~/.ssh/known_hosts
+        '''
+      }
 
  stage('Ansible Deploy') {
   steps {
