@@ -1,9 +1,6 @@
 pipeline {
   agent any
 
- 
-
-
   environment {
     SSH_CRED_ID = 'jenkins-ssh-key-id'
     AWS_CREDS   = 'aws-creds'
@@ -26,15 +23,15 @@ pipeline {
           npm ci
           npm run build
           tar -czf /tmp/react_build.tar.gz -C dist .
-      echo "✅ Build artifact created at /tmp/react_build.tar.gz"
-      ls -lh /tmp/react_build.tar.gz
+          echo "✅ Build artifact created at /tmp/react_build.tar.gz"
+          ls -lh /tmp/react_build.tar.gz
         '''
       }
     }
 
     stage('Terraform Apply') {
       steps {
-        withCredentials([[
+        withCredentials([[ 
           $class: 'AmazonWebServicesCredentialsBinding',
           credentialsId: env.AWS_CREDS
         ]]) {
@@ -44,7 +41,6 @@ pipeline {
               terraform apply -auto-approve
             '''
             script {
-              // Capture Terraform output dynamically
               env.INSTANCE_IP = sh(
                 script: "terraform output -raw instance_public_ip",
                 returnStdout: true
@@ -55,41 +51,43 @@ pipeline {
         }
       }
     }
+
     stage('Prepare SSH Known Hosts') {
       steps {
         sh '''
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${INSTANCE_IP} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${INSTANCE_IP} >> ~/.ssh/known_hosts 2>/dev/null || true
+          echo "✅ Host key added for ${INSTANCE_IP}"
         '''
       }
-
- stage('Ansible Deploy') {
-  steps {
-    withCredentials([sshUserPrivateKey(
-      credentialsId: env.SSH_CRED_ID,
-      keyFileVariable: 'KEYFILE',
-      usernameVariable: 'SSHUSER'
-    )]) {
-      sh '''
-        echo "[web]" > ansible/inventories/hosts.ini
-        echo "${INSTANCE_IP} ansible_user=${SSHUSER}" >> ansible/inventories/hosts.ini
-
-        echo "✅ Using dynamic Ansible inventory:"
-        cat ansible/inventories/hosts.ini
-
-        ansible-playbook -i ansible/inventories/hosts.ini ansible/playbook.yml \
-          --private-key ${KEYFILE} -u ${SSHUSER}
-      '''
     }
-  }
-}
 
+    stage('Ansible Deploy') {
+      steps {
+        withCredentials([sshUserPrivateKey(
+          credentialsId: env.SSH_CRED_ID,
+          keyFileVariable: 'KEYFILE',
+          usernameVariable: 'SSHUSER'
+        )]) {
+          sh '''
+            echo "[web]" > ansible/inventories/hosts.ini
+            echo "${INSTANCE_IP} ansible_user=${SSHUSER}" >> ansible/inventories/hosts.ini
 
-  }
+            echo "✅ Using dynamic Ansible inventory:"
+            cat ansible/inventories/hosts.ini
+
+            ansible-playbook -i ansible/inventories/hosts.ini ansible/playbook.yml \
+              --private-key ${KEYFILE} -u ${SSHUSER}
+          '''
+        }
+      }
+    }
+
+  } // end of stages
 
   post {
     always {
-      cleanWs()  // 🧹 clean workspace after every build
+      cleanWs()
     }
     failure {
       echo "❌ Pipeline failed!"
@@ -98,5 +96,4 @@ pipeline {
       echo "✅ Deployment complete!"
     }
   }
-}
 }
