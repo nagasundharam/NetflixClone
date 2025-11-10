@@ -15,7 +15,7 @@ const Home = () => {
             <h1>Nagasundharam</h1>
             <p>Devops Engineer</p>
             <p>Bannari Amman Institute of Technology</p>
-            <button className="btn btn-primary">See Now</button>
+            <button className="btn btn-primary">Project Ready  Now</button>
           </div>
         </div>
       </section>
