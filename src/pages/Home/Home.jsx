@@ -15,6 +15,9 @@ const Home = () => {
             <h1>Nagasundharam</h1>
             <p>Devops Engineer</p>
             <p>Jenkins Project</p>
+            <p>Jenkins pipeline Ansible Configuration and Terraform Infrastructure</p>
+            
+          
             <p>Bannari Amman Institute of Technology</p>
             <button className="btn btn-primary">Project Ready  Now</button>
           </div>
