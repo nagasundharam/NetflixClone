@@ -16,6 +16,7 @@ const Home = () => {
             <p>Devops Engineer</p>
             <p>Jenkins Project</p>
             <p>Jenkins pipeline Ansible Configuration and Terraform Infrastructure</p>
+            <p>Whenever i push something it will reflect on website</p>
             
           
             <p>Bannari Amman Institute of Technology</p>
